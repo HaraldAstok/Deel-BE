@@ -6,6 +6,7 @@ const { getContract, getActiveContracts } = require('./contracts/get-contracts')
 const { getUnpaidJobs } = require('./jobs/get-unpaid-jobs');
 const { updateJobPayment } = require('./jobs/post-update-job-payment');
 const { postDeposit } = require('./balance/post-deposit');
+const { getBestProfession } = require('./admin/get-best-profession');
 
 const app = express();
 
@@ -37,6 +38,11 @@ app.get('/jobs/unpaid', [getProfile, getUnpaidJobs]);
  * @returns {status: 'success'} when deposit succeeds
  */
  app.post('/balances/deposit/:userId', [getProfile, postDeposit]);
+
+/**
+ * @returns {highestPaidProfession: 'profession'} when profession found
+ */
+ app.get('/admin/best-profession', getBestProfession);
 
 
 module.exports = app;
