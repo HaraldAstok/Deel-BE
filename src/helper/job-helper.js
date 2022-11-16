@@ -1,4 +1,5 @@
 const { Op } = require('sequelize');
+const { getClientContractorContracts } = require('./contract-helper');
 
 async function getJob(req, jobId) {
 	const { Job } = req.app.get('models');
@@ -6,7 +7,7 @@ async function getJob(req, jobId) {
 	return await Job.findOne({ where: { id: jobId } });
 }
 
-async function findAllUnpaidContracts(req, contractIds) {
+async function findAllUnpaidJobs(req, contractIds) {
 	const { Job } = req.app.get('models');
 
 	return await Job.findAll({
@@ -19,4 +20,11 @@ async function findAllUnpaidContracts(req, contractIds) {
 	});
 }
 
-module.exports = { getJob, findAllUnpaidContracts };
+async function getAllClientContractorJobs(req, clientId, contractorId) {
+	const contracts = await getClientContractorContracts(req, clientId, contractorId);
+	const contractIds = contracts.map((contract) => contract.id);
+
+	return await findAllUnpaidJobs(req, contractIds);
+}
+
+module.exports = { getJob, findAllUnpaidJobs, getAllClientContractorJobs };

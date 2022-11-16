@@ -5,6 +5,7 @@ const { getProfile } = require('./middleware/getProfile');
 const { getContract, getActiveContracts } = require('./contracts/get-contracts');
 const { getUnpaidJobs } = require('./jobs/get-unpaid-jobs');
 const { updateJobPayment } = require('./jobs/post-update-job-payment');
+const { postDeposit } = require('./balance/post-deposit');
 
 const app = express();
 
@@ -31,5 +32,11 @@ app.get('/jobs/unpaid', [getProfile, getUnpaidJobs]);
  * @returns {status: 'success'} when payment succeeds
  */
  app.post('/jobs/:job_id/pay', [getProfile, updateJobPayment]);
+
+/**
+ * @returns {status: 'success'} when deposit succeeds
+ */
+ app.post('/balances/deposit/:userId', [getProfile, postDeposit]);
+
 
 module.exports = app;
