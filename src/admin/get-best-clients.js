@@ -9,8 +9,8 @@ const getBestClients = async (req, res) => {
 
 	const sortedResults = {};
 	clients.forEach((line) => {
-		const fullName = line.firstName + ' ' + line.lastName;
-        
+		const fullName = line.fullName;
+
 		if (!(fullName in sortedResults)) {
 			sortedResults[fullName] = line.price;
 		} else {
@@ -18,10 +18,21 @@ const getBestClients = async (req, res) => {
 		}
 	});
 
-	const highestPaidCustomer = Object.keys(sortedResults).reduce((a, b) =>
-		sortedResults[a] > sortedResults[b] ? a : b,
-	);
-	return res.json({ highestPaidCustomer });
+	let highestPaidclients = Object.keys(sortedResults).slice(0, limit);
+
+	let result = clients.filter((client) => {
+		return highestPaidclients.includes(client.fullName);
+	});
+
+	const filteredResults = result.reduce((acc, current) => {
+		const x = acc.find((item) => item.id === current.id);
+		if (!x) {
+			return acc.concat([current]);
+		} else {
+			return acc;
+		}
+	}, []);
+	return res.json(filteredResults);
 };
 
 module.exports = { getBestClients };

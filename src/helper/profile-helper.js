@@ -1,8 +1,8 @@
 const { sequelize } = require('../model');
 
-async function searchBestClients(start, end, limit) {
+async function searchBestClients(start, end) {
 	const [results] = await sequelize.query(
-		'SELECT firstName, lastName, price ' +
+		'SELECT Profile.id AS id, firstName || " " || lastName AS fullName, price ' +
 			'FROM Profiles AS Profile ' +
 			'JOIN Contracts AS Contract ON ClientId = Profile.id ' +
 			'JOIN Jobs AS Job ON ContractId = Contract.id ' +
@@ -11,9 +11,7 @@ async function searchBestClients(start, end, limit) {
 			start +
 			"' AND '" +
 			end +
-			"' " +
-			'LIMIT ' +
-			limit,
+			"' ",
 	);
 	return results;
 }
