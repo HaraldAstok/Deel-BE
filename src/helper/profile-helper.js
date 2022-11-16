@@ -1,5 +1,23 @@
 const { sequelize } = require('../model');
 
+async function searchBestClients(start, end, limit) {
+	const [results] = await sequelize.query(
+		'SELECT firstName, lastName, price ' +
+			'FROM Profiles AS Profile ' +
+			'JOIN Contracts AS Contract ON ClientId = Profile.id ' +
+			'JOIN Jobs AS Job ON ContractId = Contract.id ' +
+			"WHERE type = 'client' " +
+			"AND Job.paymentDate BETWEEN '" +
+			start +
+			"' AND '" +
+			end +
+			"' " +
+			'LIMIT ' +
+			limit,
+	);
+	return results;
+}
+
 async function searchBestProfession(start, end) {
 	const [results] = await sequelize.query(
 		'SELECT price AS job_price, profession ' +
@@ -26,4 +44,4 @@ async function updateProfile(req, balance, id) {
 	await Profile.update({ balance }, { where: { id } });
 }
 
-module.exports = { updateProfile, getProfile, searchBestProfession };
+module.exports = { updateProfile, getProfile, searchBestProfession, searchBestClients };

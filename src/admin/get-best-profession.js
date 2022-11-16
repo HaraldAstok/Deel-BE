@@ -2,9 +2,6 @@ const { searchBestProfession } = require('../helper/profile-helper');
 
 const getBestProfession = async (req, res) => {
 	const { start, end } = req.query;
-	if (start === undefined || end === undefined) {
-		return res.status(404).send({ message: 'start or end missing from params', status: 404 }).end();
-	}
 
 	const results = await searchBestProfession(start, end);
 	if (!results) return res.status(404).send({ message: 'no results found', status: 404 }).end();
@@ -24,4 +21,4 @@ const getBestProfession = async (req, res) => {
 	return res.json({ highestPaidProfession });
 };
 
-module.exports = {getBestProfession}
+module.exports = { getBestProfession };
